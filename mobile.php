@@ -53,84 +53,56 @@ else{
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Mobile Info</title>
 
-<script type="text/javascript" src="js/jquery-latest.js"></script> 
-<script type="text/javascript" src="js/jquery.tablesorter.min.js"></script> 
+<link href="media/css/demo_page.css" rel="stylesheet" type="text/css" />
+<link href="media/css/demo_table.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" language="javascript" src="media/js/jquery.js"></script>
+<script class="jsbin" src="media/js/jquery.dataTables.min.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function() 
-    { 
-        $("#myTable").tablesorter(); 
-    } 
-); 
+$(document).ready(function() {
+    $('#machine_table').dataTable( {
+       "aaSorting": [[1, 'desc'], [2, 'desc'],[3, 'desc'],[4, 'desc']]
+    } );
+} );
 </script> 
 
 </head>
 <body>
 
-<table id="myTable" class="tablesorter"> 
-<thead> 
-<tr> 
-    <th>Last Name</th> 
-    <th>First Name</th> 
-    <th>Email</th> 
-    <th>Due</th> 
-    <th>Web Site</th> 
-</tr> 
-</thead> 
-<tbody> 
-<tr> 
-    <td>Smith</td> 
-    <td>John</td> 
-    <td>jsmith@gmail.com</td> 
-    <td>$50.00</td> 
-    <td>http://www.jsmith.com</td> 
-</tr> 
-<tr> 
-    <td>Bach</td> 
-    <td>Frank</td> 
-    <td>fbach@yahoo.com</td> 
-    <td>$50.00</td> 
-    <td>http://www.frank.com</td> 
-</tr> 
-<tr> 
-    <td>Doe</td> 
-    <td>Jason</td> 
-    <td>jdoe@hotmail.com</td> 
-    <td>$100.00</td> 
-    <td>http://www.jdoe.com</td> 
-</tr> 
-<tr> 
-    <td>Conway</td> 
-    <td>Tim</td> 
-    <td>tconway@earthlink.net</td> 
-    <td>$50.00</td> 
-    <td>http://www.timconway.com</td> 
-</tr> 
-</tbody> 
-</table> 
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="machine_table">
+<thead>
+<tr>
+	<th>IMEI</th>
+	<th>Model</th>
+   	<th>Version</th>
+    <th>Owner</th>
+    <th>Status</th>
+</tr>
+</thead>
 
 <?php
  	try
 	{
 		//open the database
 		$db = new PDO('sqlite:mobile.sqlite');
-		print "<table border=1>";
-		print "<tr><td>owner</td><td>version</td><td>manufacturer</td><td>status</td></tr>";
-		$result = $db->query('SELECT * FROM mobile');
+		$result = $db->query('SELECT * FROM mobile where imei is not null');
 		foreach($result as $row)
 		{
-			print "<tr><td>".$row['owner']."</td>";
-			print "<td>".$row['version']."</td>";
-			print "<td>".$row['manufacturer']."</td>";
-			print "<td>".$row['status']."</td></tr>";
+			echo("<tr class='even gradeC'><td>" . $row['imei'] . "</td>");
+			echo("<td>" . $row['manufacturer'] . "</td>");
+			echo("<td>" . $row['version'] . "</td>");
+			echo("<td>" . $row['owner'] . "</td>");
+			echo("<td>" . $row['status'] . "</td></tr>");
 		}
-		print "</table>";
+		echo("</tbody>");
+		echo("</table>");
 		// close the database connection
 		$db = NULL;
 	}
 	catch(PDOException $e)
 	{
-		print 'Exception : '. $e->getMessage();
+		echo('Exception : '. $e->getMessage());
 	}
 
 echo("</body>");
